@@ -1,0 +1,17 @@
+spring.datasource:
+  url: "jdbc:h2:mem:testdb;mv_store=false;DB_CLOSE_DELAY=-1"
+  driverClassName: org.h2.Driver
+  name: testdb
+  username: sa
+  password: ""
+  data: "classpath*:data.sql"
+
+jwt.security:
+  passwordSecretKey: xm8E454V6H23dfsgvsdvy5RMFK4EEACIDAwQus
+
+spring.jpa:
+  database-platform: "org.hibernate.dialect.H2Dialect"
+  show-sql: true
+  hibernate.ddl-auto: create
+
+spring.h2.console.enabled: true

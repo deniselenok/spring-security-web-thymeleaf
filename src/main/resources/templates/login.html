@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Please Login</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}"
+          href="../static/css/login.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script th:inline="javascript">
+        function checkStrength(password) {
+            /*<![CDATA[*/
+            //initial strength
+            var strength = 0;
+            //if the password length is less than 6, return message.
+            if (password.length < 6) {
+                $('#result').removeClass();
+                $('#result').addClass('short');
+                return 'Too short password'
+            }
+            //length is ok, lets continue.
+
+            //if length is 8 characters or more, increase strength value
+            if (password.length > 7) strength += 1;
+
+            //if password contains both lower and uppercase characters, increase strength value
+            if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1;
+
+            //if it has numbers and characters, increase strength value
+            if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1;
+
+            //if it has one special character, increase strength value
+            if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
+
+            //if it has two special characters, increase strength value
+            if (password.match(/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
+
+            //now we have calculated strength value, we can return messages
+
+            //if value is less than 2
+            if (strength < 2) {
+                $('#result').removeClass();
+                $('#result').addClass('weak');
+                return 'Weak password'
+            }
+            else if (strength == 2) {
+                $('#result').removeClass();
+                $('#result').addClass('good');
+                return 'Good password'
+            }
+            else {
+                $('#result').removeClass();
+                $('#result').addClass('strong');
+                return 'Strong password'
+            }
+            /*]]>*/
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.message a').click(function () {
+                $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+            });
+        });
+        $(document).ready(function () {
+            $('.pass_submit').keyup(function () {
+                $('#result').html(checkStrength($('.pass_submit').val()));
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div class="login-page">
+    <div class="form">
+        <form class="register-form" th:action="@{/register}" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="text" placeholder="name" name="username"/>
+            <input class="pass_submit" type="password" placeholder="password" name="password"/>
+            <span id="result"></span>
+            <button  type="submit" value="send" class="btn2">create</button>
+            <p class="message">Already registered? <a href="#">Sign In</a></p>
+        </form>
+        <form class="login-form" th:action="@{/login}" method="post">
+            <div th:if="${param.error}" class="message">
+                Invalid username and password.
+
+            </div>
+            <input type="text" id="username" name="username" placeholder="username"/>
+            <input type="password" id="password" name="password" placeholder="password"/>
+            <!--<span id="result"></span>-->
+            <button type="submit" class="btn">login</button>
+            <p class="message">Not registered? <a href="#">Create an account</a></p>
+        </form>
+    </div>
+</div>
+</body>
+</html>
